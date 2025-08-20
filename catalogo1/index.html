@@ -248,6 +248,36 @@
     margin-right: 10px;
   }
 </style>
+<style>
+  #next-episode-btn {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Adjusted position */
+    transform: translateY(-50%);
+    background-color: var(--primary-color, rgba(0, 0, 0, 0.7)); /* Themed with fallback */
+    color: var(--on-primary-color, white); /* Themed with fallback */
+    border: none;
+    border-radius: 8px;
+    width: auto;
+    height: 40px; /* Made smaller */
+    font-size: 14px; /* Made smaller */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+    padding: 0 12px; /* Made smaller */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  #next-episode-btn:hover {
+    background-color: var(--primary-color-dark, rgba(0, 0, 0, 0.9)); /* Assuming a darker theme variable */
+    filter: brightness(0.9);
+  }
+  #next-episode-btn:active {
+      transform: translateY(-50%) scale(0.95);
+  }
+</style>
 </head>
 <body>
 <div id="pageBackdrop"></div>

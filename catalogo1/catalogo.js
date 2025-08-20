@@ -967,9 +967,14 @@ function launchAdvancedPlayer(url, logoPath, itemData, mediaType, seasonInfo = n
         return;
     }
 
-    const logoForPlayerHTML = logoPath 
+    const logoForPlayerHTML = logoPath
         ? `<div id="player-logo-wrapper"><img src="${TMDB_IMAGE_BASE_URL}original${logoPath}" id="player-logo" alt="Logo"></div>`
         : '';
+
+    let nextEpisodeButtonHTML = '';
+    if (mediaType === 'tv' && seasonInfo && episodeInfo) {
+        nextEpisodeButtonHTML = `<button id="next-episode-btn" title="Próximo Episódio">Próximo ep</button>`;
+    }
 
     wrapper.innerHTML = `
         <div id="player-container">
@@ -977,6 +982,7 @@ function launchAdvancedPlayer(url, logoPath, itemData, mediaType, seasonInfo = n
         </div>
         <button id="player-close-btn" title="Voltar"><i class="fas fa-times"></i></button>
         ${logoForPlayerHTML}
+        ${nextEpisodeButtonHTML}
     `;
 
     document.body.classList.add('player-active');
@@ -986,6 +992,27 @@ function launchAdvancedPlayer(url, logoPath, itemData, mediaType, seasonInfo = n
         e.stopPropagation();
         closeAdvancedPlayer();
     });
+
+    if (mediaType === 'tv' && seasonInfo && episodeInfo) {
+        const nextEpisodeBtn = document.getElementById('next-episode-btn');
+        if (nextEpisodeBtn) {
+            nextEpisodeBtn.addEventListener('click', async () => {
+                const currentEpisodeNumber = parseInt(episodeInfo.episode_number, 10);
+                const seasonDetails = await fetchTMDB(`/tv/${itemData.id}/season/${seasonInfo.season_number}`);
+                
+                if (seasonDetails && seasonDetails.episodes) {
+                    const nextEpisode = seasonDetails.episodes.find(e => e.episode_number === currentEpisodeNumber + 1);
+
+                    if (nextEpisode) {
+                        const nextPlayerUrl = `${PLAYER_BASE_URL_SERIES}${itemData.id}/${seasonInfo.season_number}/${nextEpisode.episode_number}`;
+                        launchAdvancedPlayer(nextPlayerUrl, logoPath, itemData, 'tv', seasonInfo, nextEpisode);
+                    } else {
+                        showCustomToast('Você chegou ao final desta temporada.', 'info');
+                    }
+                }
+            });
+        }
+    }
 }
 
 
