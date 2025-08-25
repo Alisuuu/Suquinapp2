@@ -1059,6 +1059,12 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     /* --- CORREÇÃO: Removido o override para manter o tamanho base de 120px --- */
 }
 
+/* Desktops Maiores */
+@media (min-width: 1280px) {
+    header .container { max-width: 1400px; }
+    /* --- CORREÇÃO: Removido o override para manter o tamanho base de 120px --- */
+}
+
 /* Desktops Extra Grandes */
 @media (min-width: 1536px) {
     /* --- CORREÇÃO: Removido o override para manter o tamanho base de 120px --- */
@@ -1907,6 +1913,70 @@ body.player-active .swal2-backdrop {
     border-radius: 10px;
 }
 .swal-help-popup.swal2-popup .swal2-html-container::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+
+/* Page Turn Animation */
+.page-turn-out-to-left {
+    animation: slideOutToLeft 0.25s forwards ease-in;
+}
+
+.page-turn-in-from-right {
+    animation: slideInFromRight 0.25s forwards ease-out;
+}
+
+.page-turn-out-to-right {
+    animation: slideOutToRight 0.25s forwards ease-in;
+}
+
+.page-turn-in-from-left {
+    animation: slideInFromLeft 0.25s forwards ease-out;
+}
+
+@keyframes slideInFromRight {
+    from { transform: translateX(50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutToLeft {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-50px); opacity: 0; }
+}
+
+@keyframes slideInFromLeft {
+    from { transform: translateX(-50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutToRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(50px); opacity: 0; }
+}
+.details-related-section {
+    margin-top: 1.5rem;
+    padding: 0 1rem;
+}
+#relatedContentGrid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(120px, 1fr);
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+}
+
+#relatedContentGrid::-webkit-scrollbar {
+    height: 8px;
+}
+
+#relatedContentGrid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#relatedContentGrid::-webkit-scrollbar-thumb {
     background-color: var(--primary-color);
     border-radius: 10px;
 }
