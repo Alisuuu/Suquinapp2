@@ -1962,3 +1962,30 @@ body.player-active .swal2-backdrop {
     background-color: var(--surface-color);
     color: var(--text-primary);
 }
+.details-related-section {
+    margin-top: 1.5rem;
+    padding: 0 1rem;
+}
+#relatedContentGrid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(120px, 1fr);
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+}
+
+#relatedContentGrid::-webkit-scrollbar {
+    height: 8px;
+}
+
+#relatedContentGrid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#relatedContentGrid::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
