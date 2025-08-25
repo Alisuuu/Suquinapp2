@@ -792,7 +792,11 @@ async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio
         }
     });
 
-    const details = await getItemDetails(itemId, mediaType);
+    const [details, recommendations] = await Promise.all([
+        getItemDetails(itemId, mediaType),
+        fetchTMDB(`/${mediaType}/${itemId}/recommendations`)
+    ]);
+
     if (!Swal.isVisible()) return;
     if (!details || details.error) {
         Swal.update({ title: 'Erro', html: `<p class="text-red-400 text-center py-10">${details?.message || 'Não foi possível carregar os detalhes.'}</p>`, showConfirmButton: true, confirmButtonText: 'Fechar' });
@@ -825,6 +829,28 @@ async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio
     const genres = details.genres?.map(g => g.name).join(', ') || 'N/A';
     const runtime = details.runtime || details.episode_run_time?.[0] || null;
     const castSectionHTML = details.credits?.cast?.length > 0 ? `<div class="details-cast-section"><h3 class="details-section-subtitle">Elenco</h3><div class="details-cast-scroller">${details.credits.cast.slice(0, 15).map(p => `<div class="cast-member-card"><img src="${p.profile_path ? TMDB_IMAGE_BASE_URL + 'w185' + p.profile_path : PLACEHOLDER_PERSON_IMAGE}" alt="${p.name}" class="cast-member-photo"><p class="cast-member-name">${p.name}</p><p class="cast-member-character">${p.character}</p></div>`).join('')}</div></div>` : '';
+    
+    let relatedContentHTML = '';
+    if (recommendations && recommendations.results && recommendations.results.length > 0) {
+        relatedContentHTML = `
+            <div class="details-related-section">
+                <h3 class="details-section-subtitle">Conteúdo Relacionado</h3>
+                <div class="horizontal-scroll-grid" id="relatedContentGrid">
+                    ${recommendations.results.slice(0, 10).map(item => {
+                        const title = item.title || item.name;
+                        const imageUrl = item.poster_path ? getOptimizedImageUrl(item.poster_path, 342) : `https://placehold.co/400x600/0F071A/F3F4F6?text=${encodeURIComponent(title)}&font=inter`;
+                        return `
+                            <div class="content-card" data-item-id="${item.id}" data-media-type="${item.media_type || mediaType}" data-backdrop-path="${item.backdrop_path || ''}">
+                                <img src="${imageUrl}" alt="${title}" loading="lazy" style="aspect-ratio: 2/3;">
+                                <div class="title-overlay"><div class="title">${title}</div></div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
     const isFav = isFavorite(itemId, mediaType);
     
     const favoriteButtonHTML = `<button id="modalFavoriteButton" class="modal-favorite-button ${isFav ? 'active' : ''}" data-id="${itemId}" data-type="${mediaType}" title="Favoritos">${isFav ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>'}</button>`;
@@ -875,6 +901,7 @@ async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio
             </div>
             ${castSectionHTML}
             ${seasonsSectionHTML}
+            ${relatedContentHTML}
         </div>`;
 
     Swal.update({ title: '', html: detailsHTML, showConfirmButton: false });
@@ -946,6 +973,23 @@ async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio
         if (seasonTabs.length > 0) {
             seasonTabs[0].click();
         }
+    }
+
+    const relatedContentGrid = document.getElementById('relatedContentGrid');
+    if (relatedContentGrid) {
+        relatedContentGrid.addEventListener('click', (event) => {
+            const card = event.target.closest('.content-card');
+            if (card) {
+                const relatedItemId = card.dataset.itemId;
+                const relatedMediaType = card.dataset.mediaType;
+                const relatedBackdropPath = card.dataset.backdropPath;
+                
+                Swal.close();
+                setTimeout(() => {
+                    openItemModal(relatedItemId, relatedMediaType, relatedBackdropPath);
+                }, 150);
+            }
+        });
     }
 }
 
