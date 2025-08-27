@@ -814,7 +814,7 @@ async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio
     const mainPlayerUrl = !isTV && imdbId ? `${PLAYER_BASE_URL_MOVIE}${imdbId}` : null;
     
     const pageUrl = `catalogo1/index.html?type=${mediaType}&id=${itemId}`;
-    const shareUrl = `https://alisuuu.github.io/Suquinho/?pagina=${encodeURIComponent(pageUrl)}`;
+    const shareUrl = `https://transcendent-gumption-3d5eb6.netlify.app/?pagina=${encodeURIComponent(pageUrl)}`;
     
     const titleText = details.title || details.name || "N/A";
     const coverImagePath = details.backdrop_path ? `${TMDB_IMAGE_BASE_URL}w780${details.backdrop_path}` : (details.poster_path ? `${TMDB_IMAGE_BASE_URL}w780${details.poster_path}` : 'https://placehold.co/1280x720/0A0514/F0F0F0?text=Indispon%C3%ADvel');
