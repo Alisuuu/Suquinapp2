@@ -958,6 +958,9 @@ async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio
                     trailerContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${trailerKey}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
                     void trailerContainer.offsetWidth; 
                     trailerContainer.classList.add('visible');
+                    setTimeout(() => {
+                        trailerContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 200); // Add a small delay
                 }
             }
         });
