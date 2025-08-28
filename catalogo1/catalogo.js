@@ -1306,7 +1306,7 @@ function displayContinueWatching() {
                 : `https://placehold.co/400x600/0F071A/F3F4F6?text=${encodeURIComponent(title)}&font=inter`;
 
             const detailText = item.media_type === 'tv' && item.season && item.episode
-                ? `T${item.season} E${item.episode}`
+                ? `T${item.season} E${item.episode}${item.episode_name ? `: ${item.episode_name}` : ''}`
                 : `Visto em ${new Date(item.date).toLocaleDateString('pt-BR')}`;
             
             card.innerHTML = `
@@ -1341,7 +1341,8 @@ function addToWatchHistory(item, mediaType, seasonInfo = null, episodeInfo = nul
         media_type: mediaType,
         date: new Date().toISOString(),
         season: seasonInfo?.season_number || null,
-        episode: episodeInfo?.episode_number || null
+        episode: episodeInfo?.episode_number || null,
+        episode_name: episodeInfo?.name || null
     };
     watchHistory = watchHistory.filter(h => !(h.id === entry.id && h.media_type === entry.media_type));
     watchHistory.unshift(entry);
