@@ -757,6 +757,7 @@ async function fetchAndDisplayEpisodes(tvId, seasonNumber, container) {
 }
 
 async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio = false, parentCollection = null) {
+    document.body.classList.add('item-modal-open');
     stopMainPageBackdropSlideshow();
     updatePageBackground(backdropPath);
     parentCollectionContext = parentCollection; // Salva o contexto da coleção pai
@@ -767,6 +768,7 @@ async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio
         showConfirmButton: false, showCloseButton: true, allowOutsideClick: true,
         customClass: { popup: 'swal2-popup swal-details-popup' },
         willClose: () => {
+            document.body.classList.remove('item-modal-open');
             if (isTransitioningModals || document.body.classList.contains('player-active')) return;
 
             // Se existe uma coleção pai, volta para ela
@@ -1669,7 +1671,24 @@ function openCombinedModal() {
                 titleElement.style.display = 'flex';
                 titleElement.style.justifyContent = 'space-between';
                 titleElement.style.alignItems = 'center';
-                titleElement.appendChild(settingsButton);
+
+                const headerContainer = document.createElement('div');
+                headerContainer.className = 'modal-header-container';
+
+                const themeSelectorHTML = `
+                    <div class="theme-selector-container">
+                        <h3 class="theme-selector-title">Temas</h3>
+                        <div class="theme-buttons">
+                            <button class="theme-button dracula" data-theme="dracula" title="Dracula"></button>
+                            <button class="theme-button anime" data-theme="anime" title="Anime"></button>
+                            <button class="theme-button noir" data-theme="noir" title="Noir"></button>
+                        </div>
+                    </div>
+                `;
+                headerContainer.innerHTML = themeSelectorHTML;
+
+                headerContainer.appendChild(settingsButton);
+                titleElement.appendChild(headerContainer);
             }
 
             settingsButton.addEventListener('click', () => {
@@ -1890,6 +1909,15 @@ function openCombinedModal() {
                     ITEMS_PER_PAGE = newItemsPerPage;
                     renderTabContent(activeTab);
                 }
+            });
+
+            const themeButtons = popup.querySelectorAll('.theme-button');
+            themeButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const theme = e.target.dataset.theme;
+                    localStorage.setItem('selectedTheme', theme);
+                    location.reload();
+                });
             });
         }
     });
