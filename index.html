@@ -42,6 +42,33 @@
       loadThemeCss();
 </script>
 <style>
+  /* --- ESTILOS DO PRELOADER INICIAL E DE TEMA --- */
+  #preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #10111a; /* Cor de fundo escura para combinar com os temas */
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  #preloader .loader {
+    border: 6px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    border-top-color: #FFF;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+  }
+  /* --- FIM DOS ESTILOS DO PRELOADER --- */
+
   #player-fullscreen-wrapper {
     position: fixed;
     top: 0;
@@ -280,6 +307,12 @@
 </style>
 </head>
 <body>
+
+<!-- Preloader para carregamento inicial e de tema -->
+<div id="preloader">
+    <div class="loader"></div>
+</div>
+
 <div id="pageBackdrop"></div>
 <div class="loader-overlay" id="loader" style="display: none;"><div class="loader"></div></div>
 <!-- Container para o player em tela cheia (movido para cá para melhor funcionamento) -->
