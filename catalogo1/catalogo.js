@@ -1911,12 +1911,28 @@ function openCombinedModal() {
                 }
             });
 
+            // --- LÓGICA DE TROCA DE TEMA MODIFICADA ---
             const themeButtons = popup.querySelectorAll('.theme-button');
             themeButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
                     const theme = e.target.dataset.theme;
-                    localStorage.setItem('selectedTheme', theme);
-                    location.reload();
+                    const currentTheme = localStorage.getItem('selectedTheme') || 'dracula';
+                    
+                    if (theme !== currentTheme) {
+                        localStorage.setItem('selectedTheme', theme);
+                        
+                        // Mostra o preloader antes de recarregar
+                        const preloader = document.getElementById('preloader');
+                        if (preloader) {
+                            preloader.style.opacity = '1';
+                            preloader.style.visibility = 'visible';
+                        }
+                        
+                        // Recarrega a página após um pequeno atraso para garantir que o preloader seja exibido
+                        setTimeout(() => {
+                            location.reload();
+                        }, 150);
+                    }
                 });
             });
         }
@@ -2095,4 +2111,16 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         loadMainPageContent();
     }
+});
+
+// --- LÓGICA PARA ESCONDER O PRELOADER APÓS O CARREGAMENTO COMPLETO ---
+window.addEventListener('load', () => {
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    // Adiciona um pequeno atraso para suavizar a transição
+    setTimeout(() => {
+        preloader.style.opacity = '0';
+        preloader.style.visibility = 'hidden';
+    }, 200);
+  }
 });
