@@ -1369,8 +1369,8 @@ body.swal2-shown header {
 }
 
 /* Hide main content when modal is open to only show the backdrop */
-body.swal2-shown:not(.combined-modal-open):not(.filter-modal-open) #main-content,
-body.swal2-shown:not(.combined-modal-open):not(.filter-modal-open) #floating-header-controls {
+body.item-modal-open #main-content,
+body.item-modal-open #floating-header-controls {
     visibility: hidden;
 }
 
