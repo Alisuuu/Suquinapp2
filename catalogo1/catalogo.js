@@ -760,7 +760,7 @@ async function fetchAndDisplayEpisodes(tvId, seasonNumber, container) {
     });
 }
 
-async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio = false, parentCollection = null) {
+async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio = false, parentCollection = null, watchedSeason = null, watchedEpisode = null) {
     document.body.classList.add('item-modal-open');
     stopMainPageBackdropSlideshow();
     updatePageBackground(backdropPath);
@@ -977,7 +977,34 @@ async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio
         });
 
         if (seasonTabs.length > 0) {
-            seasonTabs[0].click();
+            // Function to handle automatic episode play
+            const autoPlayWatchedEpisode = async () => {
+                if (watchedSeason && watchedEpisode) {
+                    // Find and click the correct season tab
+                    const targetSeasonTab = Array.from(seasonTabs).find(tab => parseInt(tab.dataset.seasonNumber) === watchedSeason);
+                    if (targetSeasonTab) {
+                        // Simulate click to load episodes for the watched season
+                        targetSeasonTab.click();
+
+                        // Wait for episodes to load (you might need a more robust way to wait for content)
+                        // For now, a simple setTimeout will do, but ideally, you'd listen for a DOM change or a custom event
+                        setTimeout(() => {
+                            const targetEpisodeButton = episodesContainer.querySelector(`.episode-play-button[data-episode-number="${watchedEpisode}"]`);
+                            if (targetEpisodeButton) {
+                                targetEpisodeButton.click(); // Simulate click to play the episode
+                            }
+                        }, 500); // Adjust delay as needed
+                    }
+                }
+            };
+
+            // If watchedSeason is provided, try to auto-play
+            if (watchedSeason && watchedEpisode) {
+                autoPlayWatchedEpisode();
+            } else {
+                // Otherwise, default to the first season
+                seasonTabs[0].click();
+            }
         }
     }
 
@@ -1298,7 +1325,7 @@ function displayContinueWatching() {
         watchHistory.forEach(item => {
             const card = document.createElement('div');
             card.className = 'content-card';
-            card.onclick = () => openItemModal(item.id, item.media_type, item.backdrop_path);
+            card.onclick = () => openItemModal(item.id, item.media_type, item.backdrop_path, false, null, item.season, item.episode);
 
             const title = item.title || item.name || 'Título';
             const imageUrl = item.poster_path
