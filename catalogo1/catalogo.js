@@ -715,7 +715,7 @@ function findBestTrailer(videos) {
 }
 
 async function fetchAndDisplayEpisodes(tvId, seasonNumber, container) {
-    container.innerHTML = '<div class="loader mx-auto my-3" style="width: 30px; height: 30px; border-width: 3px;"></div>';
+    container.innerHTML = '<div class="image-loader mx-auto my-3" style="width: 30px; height: 30px;"></div>';
     const seasonDetails = await fetchTMDB(`/tv/${tvId}/season/${seasonNumber}`);
 
     if (!seasonDetails || seasonDetails.error || !seasonDetails.episodes) {
@@ -768,7 +768,7 @@ async function openItemModal(itemId, mediaType, backdropPath = null, fromSorteio
 
     currentOpenSwalRef = Swal.fire({
         title: 'A carregar detalhes...',
-        html: '<div class="loader mx-auto my-10" style="width: 40px; height: 40px; border-width: 4px;"></div>',
+        html: '<div class="image-loader mx-auto my-10" style="width: 40px; height: 40px;"></div>',
         showConfirmButton: false, showCloseButton: true, allowOutsideClick: true,
         customClass: { popup: 'swal2-popup swal-details-popup' },
         willClose: () => {
@@ -1028,12 +1028,36 @@ function launchAdvancedPlayer(url, logoPath, itemData, mediaType, seasonInfo = n
 
     wrapper.innerHTML = `
         <div id="player-container">
-            <iframe id="player-iframe" src="${url}" allowfullscreen></iframe>
+            <div id="player-loading-spinner" class="image-loader"></div>
+            <iframe id="player-iframe" src="${url}" allowfullscreen style="display: none;"></iframe>
         </div>
         <button id="player-close-btn" title="Voltar"><i class="fas fa-times"></i></button>
         ${logoForPlayerHTML}
         ${nextEpisodeButtonHTML}
     `;
+
+    const playerIframe = document.getElementById('player-iframe');
+    const playerLoadingSpinner = document.getElementById('player-loading-spinner');
+
+    // Function to hide loader and show iframe
+    const hideLoaderAndShowIframe = () => {
+        if (playerLoadingSpinner) {
+            playerLoadingSpinner.style.display = 'none';
+        }
+        if (playerIframe) {
+            playerIframe.style.display = 'block';
+        }
+    };
+
+    // Set a timeout to hide the loader and show the iframe after a delay
+    // This handles cases where the iframe's onload might not fire (e.g., cross-origin)
+    const loaderTimeout = setTimeout(hideLoaderAndShowIframe, 5000); // 5 seconds
+
+    // Add onload listener to the iframe
+    playerIframe.onload = () => {
+        clearTimeout(loaderTimeout); // Clear the timeout if iframe loads successfully
+        hideLoaderAndShowIframe();
+    };
 
     document.body.classList.add('player-active');
     wrapper.style.display = 'flex';
