@@ -9,6 +9,8 @@
 <link href="./assets/fontawesome/css/custom-fontawesome.css" rel="stylesheet"/>
 <link href="./assets/fonts/inter.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet"/>
+<link rel="preconnect" href="https://playerflixapi.com">
+<link rel="dns-prefetch" href="https://playerflixapi.com">
 <!-- Folhas de Estilo - Carregamento Dinâmico -->
 <script>
       const loadThemeCss = () => {
@@ -81,6 +83,19 @@
     align-items: center;
     justify-content: center;
   }
+  .player-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    z-index: 1; /* Ensure it's above the iframe initially */
+  }
   #calendar-panel {
     z-index: 99; /* Garante que o painel do calendário fique abaixo do player */
     height: calc(100% - 60px); /* Deixa espaço para os botões flutuantes */
@@ -118,6 +133,16 @@
             border-top-color: #FFF;
             width: 36px;
             height: 36px;
+            animation: spin 1s linear infinite;
+        }
+
+        .image-loader {
+            background-image: url('../p2.png'); /* Assuming p2.png is in the root or accessible via this path */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 40px; /* Adjust size as needed */
+            height: 40px; /* Adjust size as needed */
             animation: spin 1s linear infinite;
         }
 
@@ -310,11 +335,11 @@
 
 <!-- Preloader para carregamento inicial e de tema -->
 <div id="preloader">
-    <div class="loader"></div>
+    <div class="image-loader"></div>
 </div>
 
 <div id="pageBackdrop"></div>
-<div class="loader-overlay" id="loader" style="display: none;"><div class="loader"></div></div>
+<div class="loader-overlay" id="loader" style="display: none;"><div class="image-loader"></div></div>
 <!-- Container para o player em tela cheia (movido para cá para melhor funcionamento) -->
 <div id="player-fullscreen-wrapper"></div>
 <!-- Conteúdo Principal do Catálogo -->
@@ -357,7 +382,7 @@
 <div class="relative">
 <div class="horizontal-scroll-grid" id="moviesResultsGrid"></div>
 <div class="horizontal-loader" id="popularMoviesLoader">
-<div class="loader-spinner"></div>
+<div class="image-loader"></div>
 </div>
 </div>
 </div>
@@ -366,7 +391,7 @@
 <div class="relative">
 <div class="horizontal-scroll-grid" id="tvShowsResultsGrid"></div>
 <div class="horizontal-loader" id="topRatedTvShowsLoader">
-<div class="loader-spinner"></div>
+<div class="image-loader"></div>
 </div>
 </div>
 </div>
@@ -378,7 +403,7 @@
     </div>
     <h2 class="section-title" id="singleSectionTitle">Resultados</h2>
     <div class="main-results-grid" id="singleResultsGrid"></div>
-    <div class="w-full flex justify-center py-4" id="searchResultsLoader" style="display: none;"><div class="loader-spinner"></div></div>
+    <div class="w-full flex justify-center py-4" id="searchResultsLoader" style="display: none;"><div class="image-loader"></div></div>
 </div>
 </main>
 </div>
