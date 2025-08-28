@@ -723,19 +723,23 @@ async function fetchAndDisplayEpisodes(tvId, seasonNumber, container) {
         return;
     }
 
-    const episodesHTML = seasonDetails.episodes.map(episode => `
-        <div class="episode-item">
-            <span class="episode-number">${episode.episode_number}.</span>
-            <div class="episode-info">
-                <div class="episode-title">${episode.name || 'Episódio ' + episode.episode_number}</div>
+    const episodesHTML = seasonDetails.episodes.map(episode => {
+        const episodeImageUrl = episode.still_path ? getOptimizedImageUrl(episode.still_path, 300) : 'https://placehold.co/300x169/0A0514/F3F4F6?text=Sem%20Imagem';
+        return `
+            <div class="episode-item">
+                <img src="${episodeImageUrl}" alt="${episode.name || 'Episódio ' + episode.episode_number}" class="episode-image">
+                <div class="episode-info">
+                    <div class="episode-title">${episode.episode_number}. ${episode.name || 'Episódio ' + episode.episode_number}</div>
+                    <p class="episode-overview">${episode.overview || 'Sinopse não disponível.'}</p>
+                </div>
+                <div class="episode-actions">
+                    <button class="episode-play-button" data-episode-number="${episode.episode_number}" title="Assistir Episódio ${episode.episode_number}">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
             </div>
-            <div class="episode-actions">
-                <button class="episode-play-button" data-episode-number="${episode.episode_number}" title="Assistir Episódio ${episode.episode_number}">
-                    <i class="fas fa-play"></i>
-                </button>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 
     container.innerHTML = `<div class="episodes-list">${episodesHTML}</div>`;
 
