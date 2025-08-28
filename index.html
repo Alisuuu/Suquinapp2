@@ -462,5 +462,35 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paginaParam = urlParams.get('pagina');
+
+    if (paginaParam) {
+        try {
+            const decodedPagina = decodeURIComponent(paginaParam);
+            // Create a dummy URL to easily parse search params from the decoded string
+            const tempUrl = new URL(decodedPagina.startsWith('http') ? decodedPagina : `http://dummy.com/${decodedPagina}`);
+            const itemType = tempUrl.searchParams.get('type');
+            const itemId = tempUrl.searchParams.get('id');
+
+            if (itemType && itemId) {
+                // Ensure openItemModal is available before calling
+                // A small delay might be needed to ensure catalogo.js is fully parsed and functions are ready
+                setTimeout(() => {
+                    if (typeof openItemModal === 'function') {
+                        openItemModal(itemId, itemType);
+                    } else {
+                        console.error('openItemModal function not found. Make sure catalogo.js is loaded.');
+                    }
+                }, 100); // Small delay
+            }
+        } catch (e) {
+            console.error('Error parsing pagina parameter:', e);
+        }
+    }
+});
+</script>
 </body>
 </html>
