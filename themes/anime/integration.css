@@ -82,3 +82,58 @@ body.calendar-open #calendar-panel {
         width: 95%; /* Ocupa mais espaço em telas de celular */
     }
 }
+
+.modal-header-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Theme Selector */
+.theme-selector-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #1a1a2e;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+}
+
+.theme-selector-title {
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+.theme-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.theme-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.theme-button:hover {
+    transform: scale(1.1);
+    border-color: #fff;
+}
+
+.theme-button.dracula {
+    background-color: #bd93f9;
+}
+
+.theme-button.anime {
+    background-color: #ff66c4;
+}
+
+.theme-button.noir {
+    background-color: #000000;
+}
