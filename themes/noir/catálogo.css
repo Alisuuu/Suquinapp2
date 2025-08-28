@@ -798,7 +798,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     display: flex;
     align-items: center;
     gap: 1rem;
-    background-color: rgba(234, 234, 234, 0.03);
+    background-color: rgba(243, 243, 255, 0.03);
     padding: 0.75rem;
     border-radius: 0.6rem;
     border: 1px solid var(--border-color);
@@ -807,7 +807,7 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 }
 
 .history-card:hover {
-    background-color: rgba(234, 234, 234, 0.05);
+    background-color: rgba(243, 243, 255, 0.05);
     border-color: var(--primary-color);
 }
 
@@ -885,16 +885,16 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 }
 
 .season-tab:hover {
-    background: var(--primary-color);
+    background: var(--primary-gradient);
     color: var(--on-primary-color);
     border-color: var(--primary-color);
 }
 
 .season-tab.active {
-    background: var(--primary-color);
+    background: var(--primary-gradient);
     color: var(--on-primary-color);
     border-color: var(--primary-color);
-    box-shadow: 0 0 10px rgba(234, 234, 234, 0.15);
+    box-shadow: 0 0 10px rgba(89, 59, 162, 0.3);
     transform: translateY(-2px);
 }
 
@@ -908,21 +908,60 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 .episodes-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 0.6rem; }
 .episodes-list::-webkit-scrollbar-thumb { background-color: var(--primary-color); border-radius: 8px; }
 
+/* Styles for Episode Details (Image and Synopsis) */
 .episode-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+    display: flex; /* Use flexbox for horizontal layout */
+    align-items: center; /* Vertically align items */
+    gap: 1rem; /* Space between elements */
     padding: 0.85rem;
     border-radius: 0.6rem;
     transition: background-color 0.2s;
+    background-color: rgba(243, 243, 255, 0.03); /* Subtle background for each item */
+    border: 1px solid var(--border-color); /* Add a subtle border */
+    margin-bottom: 0.5rem; /* Space between episode items */
 }
 
 .episode-item:not(:last-child) {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: none; /* Remove default border-bottom as we added a full border */
 }
 
-.episode-item:hover {
-    background-color: rgba(234, 234, 234, 0.05);
+.episode-image {
+    width: 120px; /* Fixed width for the image */
+    height: 67.5px; /* Maintain 16:9 aspect ratio (120 * 9 / 16) */
+    object-fit: cover;
+    border-radius: 0.4rem;
+    flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.episode-info {
+    flex-grow: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem; /* Space between title and overview */
+}
+
+.episode-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1rem; /* Adjust font size */
+    white-space: normal; /* Allow text to wrap */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit title to 2 lines */
+    -webkit-box-orient: vertical;
+}
+
+.episode-overview {
+    font-size: 0.85rem; /* Smaller font size for synopsis */
+    color: var(--text-secondary);
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limit synopsis to 3 lines */
+    -webkit-box-orient: vertical;
 }
 
 .episode-number {
@@ -931,26 +970,15 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
     font-size: 1rem;
     min-width: 25px;
     text-align: center;
-}
-
-.episode-info {
-    flex-grow: 1;
-    overflow: hidden;
-}
-
-.episode-title {
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--text-primary);
+    align-self: flex-start; /* Align number to the top */
+    padding-top: 0.2rem; /* Adjust padding to align with image */
 }
 
 .episode-play-button {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--primary-color);
+    background: var(--primary-gradient);
     color: var(--on-primary-color);
     border: 1px solid var(--primary-color);
     cursor: pointer;
@@ -963,7 +991,6 @@ body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
 
 .episode-play-button:hover {
     filter: brightness(1.1);
-    background: var(--primary-hover-color);
     border-color: var(--primary-hover-color);
     transform: scale(1.1);
 }
